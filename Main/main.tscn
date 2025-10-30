@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkjssp4pyxg02"]
+[gd_scene load_steps=7 format=3 uid="uid://bkjssp4pyxg02"]
 
 [ext_resource type="Script" uid="uid://d02cro01njgvn" path="res://Main/molecule_generator.gd" id="1_yh5la"]
+[ext_resource type="Script" uid="uid://b6100dawfd0rx" path="res://Main/molecule.gd" id="2_2w1kt"]
 
 [sub_resource type="Environment" id="Environment_yh5la"]
 background_mode = 1
@@ -19,28 +20,37 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="Theme" id="Theme_50cra"]
 Button/styles/normal = SubResource("StyleBoxFlat_yh5la")
+HBoxContainer/constants/separation = 0
 MarginContainer/constants/margin_bottom = 0
 MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10
 MarginContainer/constants/margin_top = 20
 VBoxContainer/constants/separation = 25
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w1kt"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.7352463, 0.12414821, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 4
+
 [node name="Main" type="Node"]
 script = ExtResource("1_yh5la")
+central_atom_color = Color(0.34618634, 0.54770494, 1, 1)
+atom_color = Color(0, 0.88007295, 0.8800729, 1)
+bond_color = Color(0.7539839, 0.75398386, 0.75398386, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yh5la")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
-projection = 1
-size = 4.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.9711343, 0.080800325, -0.22443156, 0, 0.9408808, 0.3387379, 0.23853347, -0.32896, 0.9137216, 0, 0, 0)
 
 [node name="Molecule" type="Node3D" parent="."]
 transform = Transform3D(3.0463725e-06, 0.0017453834, 0.99999845, 0.99999845, -0.001745386, 0, 0.0017453834, 0.9999969, -0.001745386, 0, 0, 0)
+script = ExtResource("2_2w1kt")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -57,19 +67,7 @@ focus_behavior_recursive = 1
 mouse_filter = 2
 theme = SubResource("Theme_50cra")
 
-[node name="ColorRect" type="ColorRect" parent="UI/Control"]
-custom_minimum_size = Vector2(211.71, 0)
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 2
-size_flags_vertical = 3
-color = Color(0.051970966, 0.05197096, 0.05197095, 1)
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/Control/ColorRect"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -77,36 +75,84 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer"]
+[node name="Control" type="Control" parent="UI/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="UI/Control/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="UI/Control/HBoxContainer/Control/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(941, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="UI/Control/HBoxContainer/Control/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+size = 4.0
+
+[node name="ColorRect" type="ColorRect" parent="UI/Control/HBoxContainer"]
+custom_minimum_size = Vector2(211.71, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+color = Color(0.051970966, 0.05197096, 0.05197095, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control/HBoxContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Simulador 3d de 
 geometria molecular"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Adicionar Ligações:"
 horizontal_alignment = 1
 
-[node name="SimpleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="SimpleButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Simples"
 
-[node name="DualButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="DualButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Dupla"
 
-[node name="TripleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="TripleButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Tripla"
 
-[connection signal="pressed" from="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/SimpleButton" to="." method="_on_simple_button_pressed"]
+[node name="ResetButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2w1kt")
+text = "Reset"
+
+[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/SimpleButton" to="." method="_on_new_atom_pressed" binds= [1]]
+[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/DualButton" to="." method="_on_new_atom_pressed" binds= [2]]
+[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/TripleButton" to="." method="_on_new_atom_pressed" binds= [3]]
+[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
