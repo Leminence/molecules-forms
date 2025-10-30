@@ -36,6 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
 transform = Transform3D(0.9711343, 0.080800325, -0.22443156, 0, 0.9408808, 0.3387379, 0.23853347, -0.32896, 0.9137216, 0, 0, 0)
 
 [node name="Molecule" type="Node3D" parent="."]
+transform = Transform3D(3.0463725e-06, 0.0017453834, 0.99999845, 0.99999845, -0.001745386, 0, 0.0017453834, 0.9999969, -0.001745386, 0, 0, 0)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -72,36 +73,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2"]
+[node name="Title" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Simulador 3d de 
 geometria molecular"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="Label" type="Label" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Adicionar Ligações:"
 horizontal_alignment = 1
 
-[node name="SimpleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="SimpleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Simples"
 
-[node name="DualButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="DualButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Dupla"
 
-[node name="TripleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="TripleButton" type="Button" parent="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Tripla"
 
-[connection signal="pressed" from="UI/Control/ColorRect/MarginContainer/VBoxContainer2/VBoxContainer/SimpleButton" to="." method="_on_simple_button_pressed"]
+[connection signal="pressed" from="UI/Control/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/SimpleButton" to="." method="_on_simple_button_pressed"]

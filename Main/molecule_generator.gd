@@ -27,10 +27,8 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			rotating = event.pressed
-			print("Rotating: ", rotating)
 
 	elif event is InputEventMouseMotion and rotating:
-		# Use event.relative diretamente (deslocamento do mouse desde o último frame)
 		var rel: Vector2 = event.relative
 		# Girar em Y (horizontal) e X (vertical)
 		molecule.rotate_y(rel.x * rotation_speed)
@@ -47,6 +45,7 @@ func create_atom(color: Color) -> MeshInstance3D:
 	sphere.radius = 0.25
 	sphere.height = 0.5
 
+	# Define o material do átomo
 	var atom_material = StandardMaterial3D.new()
 	atom_material.albedo_color = color
 	atom.material_override = atom_material
@@ -74,6 +73,7 @@ func create_bond(atom: MeshInstance3D, new_atom: MeshInstance3D) -> void:
 	bond_material.albedo_color.a = 0.8
 
 	# Adiciona o cilindro como filho do átomo original para herdar a transformação
+	bond.name = "Bond"
 	new_atom.add_child(bond)
 
 	# Posiciona no ponto médio entre os átomos
@@ -96,6 +96,7 @@ func set_atoms_position(Atoms: Array) -> void:
 	var y: float = 0.0
 	var z: float = 0.0
 	for i in range(Atoms.size()):
+		# Distribui os átomos em um círculo ao redor do átomo central
 		if Atoms.size() >= 0:
 			var angle = i * (PI * 2 / Atoms.size())
 			x = cos(angle)
