@@ -6,6 +6,10 @@
 [sub_resource type="Environment" id="Environment_yh5la"]
 background_mode = 1
 background_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.18000486, 0.1800049, 0.18000478, 1)
+ambient_light_sky_contribution = 0.5
+reflected_light_source = 1
 adjustment_enabled = true
 adjustment_brightness = 1.1
 
@@ -21,10 +25,11 @@ corner_radius_bottom_left = 4
 [sub_resource type="Theme" id="Theme_50cra"]
 Button/styles/normal = SubResource("StyleBoxFlat_yh5la")
 HBoxContainer/constants/separation = 0
-MarginContainer/constants/margin_bottom = 0
+Label/font_sizes/font_size = 20
+MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10
-MarginContainer/constants/margin_top = 20
+MarginContainer/constants/margin_top = 10
 VBoxContainer/constants/separation = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w1kt"]
@@ -37,19 +42,20 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 4
 
 [node name="Main" type="Node"]
-script = ExtResource("1_yh5la")
-central_atom_color = Color(0.34618634, 0.54770494, 1, 1)
-atom_color = Color(0, 0.88007295, 0.8800729, 1)
-bond_color = Color(0.7539839, 0.75398386, 0.75398386, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yh5la")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.9711343, 0.080800325, -0.22443156, 0, 0.9408808, 0.3387379, 0.23853347, -0.32896, 0.9137216, 0, 0, 0)
+transform = Transform3D(0.9711343, 0.11926673, -0.20657603, 0, 0.8660254, 0.5, 0.23853347, -0.48556715, 0.84102696, 0, 0, 0)
+directional_shadow_mode = 0
+directional_shadow_fade_start = 1.0
 
-[node name="Molecule" type="Node3D" parent="."]
-transform = Transform3D(3.0463725e-06, 0.0017453834, 0.99999845, 0.99999845, -0.001745386, 0, 0.0017453834, 0.9999969, -0.001745386, 0, 0, 0)
+[node name="MoleculeGenerator" type="Node" parent="."]
+script = ExtResource("1_yh5la")
+
+[node name="Molecule" type="Node3D" parent="MoleculeGenerator"]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("2_2w1kt")
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -67,20 +73,7 @@ focus_behavior_recursive = 1
 mouse_filter = 2
 theme = SubResource("Theme_50cra")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Control" type="Control" parent="UI/Control/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="UI/Control/HBoxContainer/Control"]
+[node name="3DView" type="SubViewportContainer" parent="UI/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,68 +84,68 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.0
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="UI/Control/HBoxContainer/Control/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="UI/Control/3DView"]
 handle_input_locally = false
-size = Vector2i(941, 648)
+size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="UI/Control/HBoxContainer/Control/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+[node name="Camera3D" type="Camera3D" parent="UI/Control/3DView/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.8)
+fov = 65.0
 size = 4.0
 
-[node name="ColorRect" type="ColorRect" parent="UI/Control/HBoxContainer"]
-custom_minimum_size = Vector2(211.71, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 3
-color = Color(0.051970966, 0.05197096, 0.05197095, 1)
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/Control/HBoxContainer/ColorRect"]
+[node name="Title" type="Label" parent="UI/Control"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -214.0
+offset_top = 10.0
+offset_right = 214.0
+offset_bottom = 38.0
+grow_horizontal = 2
+text = "Simulador de geometria e arranjo molecular"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Buttons" type="MarginContainer" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -63.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer"]
+[node name="HorizontalBox" type="HBoxContainer" parent="UI/Control/Buttons"]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-text = "Simulador 3d de 
-geometria molecular"
-horizontal_alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 8
+alignment = 1
 
-[node name="Label" type="Label" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-text = "Adicionar Ligações:"
-horizontal_alignment = 1
-
-[node name="SimpleButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="SimpleButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Simples"
 
-[node name="DualButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="DualButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Dupla"
 
-[node name="TripleButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="TripleButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Tripla"
 
-[node name="ResetButton" type="Button" parent="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="ResetButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_2w1kt")
 text = "Reset"
 
-[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/SimpleButton" to="." method="_on_new_atom_pressed" binds= [1]]
-[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/DualButton" to="." method="_on_new_atom_pressed" binds= [2]]
-[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/TripleButton" to="." method="_on_new_atom_pressed" binds= [3]]
-[connection signal="pressed" from="UI/Control/HBoxContainer/ColorRect/MarginContainer/VBoxContainer/VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/SimpleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [1]]
+[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/DualButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [2]]
+[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/TripleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [3]]
+[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/ResetButton" to="MoleculeGenerator" method="_on_reset_button_pressed"]

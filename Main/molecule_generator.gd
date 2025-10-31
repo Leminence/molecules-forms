@@ -2,9 +2,8 @@ extends Node
 
 @onready var molecule = $Molecule
 
-@export var central_atom_color: Color = Color.BLUE
-@export var atom_color: Color = Color.CYAN
-@export var bond_color: Color = Color.WHITE
+@export var central_atom_color: Color = Color.WHITE
+@export var atom_color: Color = Color.SKY_BLUE
 
 var central_atom: MeshInstance3D
 var atoms: Array = []
@@ -27,9 +26,23 @@ func set_materials():
 	atom_material.albedo_color = atom_color
 
 	bond_material = StandardMaterial3D.new()
-	bond_material.albedo_color = bond_color
+	bond_material = StandardMaterial3D.new()
+
+	var gradient = Gradient.new()
+	gradient.interpolation_mode = Gradient.GRADIENT_INTERPOLATE_CONSTANT
+	gradient.add_point(0.0, central_atom_color)
+	gradient.add_point(0.25, atom_color)
+
+	var grad_tex = GradientTexture2D.new()
+	grad_tex.fill_from = Vector2.ZERO
+	grad_tex.fill_to = Vector2i(0.0, 1.0)
+	grad_tex.width = 1
+	grad_tex.gradient = gradient
+
+	bond_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	bond_material.albedo_texture = grad_tex
 	bond_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	bond_material.albedo_color.a = 1
+	bond_material.albedo_color.a = 0.8
 
 
 func create_atom(material: StandardMaterial3D) -> MeshInstance3D:
@@ -62,13 +75,13 @@ func create_bond(atom: MeshInstance3D, new_atom: MeshInstance3D, amount: int) ->
 	
 	match amount:
 		1:
-			radius = 0.08
+			radius = 0.12
 		2:
-			radius = 0.05
+			radius = 0.08
 		3:
-			radius = 0.03
+			radius = 0.05
 
-	offset_distance = radius * 2 # Distância entre as duas ligações
+	offset_distance = radius * 2.0 # Distância entre as duas ligações
 
 	# Cria o número de cilindros necessários
 	for i in range(amount):
@@ -132,7 +145,7 @@ func set_atoms_position(Atoms: Array) -> void:
 
 func get_geometry_positions(num_atoms: int) -> Array:
 	var positions = []
-	var radius = 1.0  # Distância do átomo central
+	var radius = 0.8  # Distância do átomo central
 	
 	match num_atoms:
 		1:

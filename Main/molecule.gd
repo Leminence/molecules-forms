@@ -16,3 +16,8 @@ func _unhandled_input(event):
 		rotate_x(rel.y * rotation_speed)
 		# Limita a rotação no eixo X para não ficar de cabeça pra baixo
 		rotation_degrees.x = clamp(rotation_degrees.x, clamp_x_deg.x, clamp_x_deg.y)
+
+
+func _physics_process(delta: float) -> void:
+	if not rotating:
+		rotate_y(rotation_speed * delta * 15)
