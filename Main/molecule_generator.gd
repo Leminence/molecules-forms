@@ -4,13 +4,26 @@ extends Node
 
 @export var central_atom_color: Color = Color.WHITE
 @export var atom_color: Color = Color.SKY_BLUE
+@export var free_pair_color = Color.BEIGE
+@export var eletron_color = Color.YELLOW
 
 var central_atom: MeshInstance3D
 var atoms: Array = []
 
 var central_atom_material: StandardMaterial3D
 var atom_material: StandardMaterial3D
+var free_pair_material: StandardMaterial3D
+var eletron_material: StandardMaterial3D
 var bond_material: StandardMaterial3D
+
+class Atom extends MeshInstance3D:
+	pass
+
+class FreePair extends MeshInstance3D:
+	pass
+
+class Bond extends MeshInstance3D:
+	pass
 
 func _ready():
 	set_materials()
@@ -25,9 +38,15 @@ func set_materials():
 	atom_material = StandardMaterial3D.new()
 	atom_material.albedo_color = atom_color
 
-	bond_material = StandardMaterial3D.new()
-	bond_material = StandardMaterial3D.new()
+	free_pair_material = StandardMaterial3D.new()
+	free_pair_material.albedo_color = free_pair_color
+	free_pair_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	free_pair_material.albedo_color.a = 0.3
 
+	eletron_material = StandardMaterial3D.new()
+	eletron_material.albedo_color = eletron_color
+
+	bond_material = StandardMaterial3D.new()
 	var gradient = Gradient.new()
 	gradient.interpolation_mode = Gradient.GRADIENT_INTERPOLATE_CONSTANT
 	gradient.add_point(0.0, central_atom_color)
@@ -47,7 +66,7 @@ func set_materials():
 
 func create_atom(material: StandardMaterial3D) -> MeshInstance3D:
 	# Cria uma esfera para representar o átomo
-	var atom = MeshInstance3D.new()
+	var atom = Atom.new()
 	var sphere = SphereMesh.new()
 	# Ajusta os valores do átomo
 	sphere.radius = 0.25
@@ -85,7 +104,7 @@ func create_bond(atom: MeshInstance3D, new_atom: MeshInstance3D, amount: int) ->
 
 	# Cria o número de cilindros necessários
 	for i in range(amount):
-		var bond = MeshInstance3D.new()
+		var bond = Bond.new()
 		var cylinder = CylinderMesh.new()
 		cylinder.height = distance
 		cylinder.bottom_radius = radius
@@ -116,6 +135,39 @@ func create_bond(atom: MeshInstance3D, new_atom: MeshInstance3D, amount: int) ->
 		bond.rotate_object_local(Vector3.RIGHT, PI / 2.0)
 
 
+func create_free_pair(material: StandardMaterial3D) -> MeshInstance3D:
+	var ballon = FreePair.new()
+	var sphere = SphereMesh.new()
+	# Ajusta os valores do átomo
+	sphere.radius = 0.25
+	sphere.height = 0.75
+
+	ballon.material_override = material
+
+	ballon.mesh = sphere
+	ballon.name = "Free pair"
+
+	for i in range(2):
+		var new_eletron = MeshInstance3D.new()
+		var eletron_shape = SphereMesh.new()
+
+		eletron_shape.radius = 0.1
+		eletron_shape.height = 0.2
+
+		new_eletron.material_override = eletron_material
+		new_eletron.mesh = eletron_shape
+
+		var offset = 0.11
+		if i == 0:
+			new_eletron.position = ballon.position - Vector3(0, -offset, 0)
+		if i == 1:
+			new_eletron.position = ballon.position - Vector3(0, offset, 0)
+
+		ballon.add_child(new_eletron)
+
+	return ballon
+
+
 func get_perpendicular_vector(direction: Vector3) -> Vector3:
 	# Encontra um vetor perpendicular ao eixo da ligação
 	# Usa o vetor UP como referência, mas evita quando paralelo
@@ -130,17 +182,28 @@ func get_perpendicular_vector(direction: Vector3) -> Vector3:
 	return perpendicular
 
 
-func set_atoms_position(Atoms: Array) -> void:
-	var positions = get_geometry_positions(Atoms.size())
+func set_atoms_position(atoms_array: Array) -> void:
+	var positions = get_geometry_positions(atoms_array.size())
 	
-	for i in range(Atoms.size()):
-		Atoms[i].position = positions[i]
+	atoms_array.sort_custom(func(a, b): 
+		if a is FreePair and not b is FreePair:
+			return false
+		if b is FreePair and not a is FreePair:
+			return true
+		return true)
+
+	for i in range(atoms_array.size()):
+		atoms_array[i].position = positions[i]
+
+		if atoms_array[i] is FreePair:
+			atoms_array[i].position /= 1.5
 		
-		if central_atom.position == Atoms[i].position:
+		if central_atom.position == atoms_array[i].position:
 			push_error("Posição do átomo é igual à do átomo central, não é possível fazer look_at.")
 			continue
 		
-		Atoms[i].look_at(central_atom.position, Vector3.UP)
+		atoms_array[i].look_at(central_atom.global_position, Vector3.UP)
+		atoms_array[i].rotate_object_local(Vector3.RIGHT, PI/2)
 
 
 func get_geometry_positions(num_atoms: int) -> Array:
@@ -169,13 +232,13 @@ func get_geometry_positions(num_atoms: int) -> Array:
 			positions.append(Vector3(-a, -a, a))
 		5:
 			# Bipiramidal trigonal
+			# 2 átomos nos eixos axiais
+			positions.append(Vector3(0, radius, 0))
+			positions.append(Vector3(0, -radius, 0))
 			# 3 átomos no plano equatorial
 			for i in range(3):
 				var angle = i * (PI * 2 / 3)
 				positions.append(Vector3(cos(angle) * radius, 0, sin(angle) * radius))
-			# 2 átomos nos eixos axiais
-			positions.append(Vector3(0, radius, 0))
-			positions.append(Vector3(0, -radius, 0))
 		6:
 			# Octaédrica
 			positions.append(Vector3(radius, 0, 0))
@@ -204,6 +267,18 @@ func _on_new_atom_pressed(num: int) -> void:
 
 	set_atoms_position(atoms)
 	create_bond(central_atom, new_atom, num)
+
+
+func _on_new_pair_pressed():
+	if atoms.size() >= 6:
+		return # Limita a 6 átomos ligados ao central
+
+	var new_pair = create_free_pair(free_pair_material)
+
+	molecule.add_child(new_pair)
+	atoms.append(new_pair)
+
+	set_atoms_position(atoms)
 
 
 func _on_reset_button_pressed() -> void:
