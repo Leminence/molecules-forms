@@ -154,7 +154,7 @@ alignment = 1
 vertical_icon_alignment = 0
 
 [node name="Control" type="Control" parent="UI/Control"]
-custom_minimum_size = Vector2(241.115, 311.965)
+custom_minimum_size = Vector2(260, 330)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -163,6 +163,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 grow_horizontal = 0
 grow_vertical = 2
+focus_behavior_recursive = 1
 
 [node name="ColorRect" type="ColorRect" parent="UI/Control/Control"]
 layout_mode = 1
@@ -200,7 +201,7 @@ theme_override_constants/separation = 8
 [node name="VSEPR" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 3
 text = "VSEPR:
  -"
 label_settings = SubResource("LabelSettings_qvhan")
@@ -208,7 +209,7 @@ label_settings = SubResource("LabelSettings_qvhan")
 [node name="Geometria" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 3
 text = "Geometria:
  -"
 label_settings = SubResource("LabelSettings_qvhan")
@@ -216,8 +217,16 @@ label_settings = SubResource("LabelSettings_qvhan")
 [node name="Arranjo" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 2
+size_flags_vertical = 3
 text = "Arranjo:
+ -"
+label_settings = SubResource("LabelSettings_qvhan")
+
+[node name="Angulos" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Angulos:
  -"
 label_settings = SubResource("LabelSettings_qvhan")
 

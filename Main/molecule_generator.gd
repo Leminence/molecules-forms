@@ -5,6 +5,7 @@ extends Node
 @onready var vsepr_label: Label = %VSEPR
 @onready var geometria_label: Label = %Geometria
 @onready var arranjo_label: Label = %Arranjo
+@onready var angulos_label: Label = %Angulos
 
 @export var central_atom_color: Color = Color.WHITE
 @export var atom_color: Color = Color.SKY_BLUE
@@ -249,20 +250,6 @@ func get_geometry_positions(num_atoms: int) -> Array:
 	return positions
 
 
-func get_perpendicular_vector(direction: Vector3) -> Vector3:
-	# Encontra um vetor perpendicular ao eixo da ligação
-	# Usa o vetor UP como referência, mas evita quando paralelo
-	var reference = Vector3.UP
-	
-	# Se a direção é paralela ao UP, usa outro vetor de referência
-	if abs(direction.dot(Vector3.UP)) > 0.99:
-		reference = Vector3.RIGHT
-	
-	# Produto vetorial para obter um vetor perpendicular
-	var perpendicular = direction.cross(reference).normalized()
-	return perpendicular
-
-
 func update_molecule_info(molecule_array: Array) -> void:
 	var atom_num: int = 0
 	var freepair_num: int = 0
@@ -276,11 +263,26 @@ func update_molecule_info(molecule_array: Array) -> void:
 	
 	var data = molecular_data.get_geometry(atom_num, freepair_num)
 
-	geometria_label.text = "Geometria:\n - " + (data["geometria"] if atom_num > 1 else "")
-	arranjo_label.text = ("Arranjo:\n - " + data["arranjo"] if atom_num > 1 and freepair_num > 0 else "")
+	geometria_label.text = "Geometria:\n - " + (data["geometria"] if data["geometria"] else "")
+	arranjo_label.text = "Arranjo:\n - " + (data["arranjo"] if data["arranjo"] else "")
+	angulos_label.text = "Angulos:\n - " + str(data["angulos"])
+
+
+func get_perpendicular_vector(direction: Vector3) -> Vector3:
+	# Encontra um vetor perpendicular ao eixo da ligação
+	# Usa o vetor UP como referência, mas evita quando paralelo
+	var reference = Vector3.UP
+	
+	# Se a direção é paralela ao UP, usa outro vetor de referência
+	if abs(direction.dot(Vector3.UP)) > 0.99:
+		reference = Vector3.RIGHT
+	
+	# Produto vetorial para obter um vetor perpendicular
+	var perpendicular = direction.cross(reference).normalized()
+	return perpendicular
 
 # Cria um novo átomo e sua ligação ao átomo central ao clicar no botão
-func _on_new_atom_pressed(num: int) -> void:
+func _on_new_atom_pressed(bond_num: int) -> void:
 	if atoms.size() >= 6:
 		return # Limita a 6 átomos ligados ao central
 
@@ -291,7 +293,7 @@ func _on_new_atom_pressed(num: int) -> void:
 
 	set_atoms_position(atoms)
 	update_molecule_info(atoms)
-	create_bond(central_atom, new_atom, num)
+	create_bond(central_atom, new_atom, bond_num)
 
 
 func _on_new_pair_pressed():

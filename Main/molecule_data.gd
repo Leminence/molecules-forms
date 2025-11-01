@@ -1,108 +1,74 @@
 # molecular_data.gd
 extends Node
 
+const LINEAR: String = "Linear"
+const TRIGONAL_PLANAR = "Trigonal plana"
+const TETRAEDRIC = "Tetraédrica"
+const BIPIRAMIDAL = "Bipiramidal Trigonal"
+const OCTAEDRIC = "Octaédrica"
+
+const ANGULAR: String = "Angular"
+const PIRAMIDAL: String = "Piramidal"
+const SEESAW: String = "Gangorra"
+const QUAD_PIRAMIDAL: String = "Piramidal Quadrada"
+const T_SHAPE: String = "Forma de T"
+const QUAD_PLANAR: String = "Quadrado Planar"
+
 const GEOMETRIES = {
-	# Formato: "pares_ligantes_pares_livres": {dados}
-	
-	"2_0": {
-		"geometria": "Linear",
-		"arranjo": "Linear",
-		"angulo": 180,
-		"exemplo": "CO₂, BeH₂"
+	"geometrias": {
+		[2, 1]: ANGULAR,
+		[3, 1]: PIRAMIDAL,
+		[4, 1]: SEESAW,
+		[5, 1]: QUAD_PIRAMIDAL,
+		[2, 2]: ANGULAR,
+		[3, 2]: T_SHAPE,
+		[4, 2]: QUAD_PLANAR,
+		[2, 3]: LINEAR,
+		[3, 3]: T_SHAPE,
+		[2, 4]: LINEAR,
 	},
-	
-	"3_0": {
-		"geometria": "Trigonal Plana",
-		"arranjo": "Trigonal Plana",
-		"angulo": 120,
-		"exemplo": "BF₃, SO₃"
+	"arranjos": {
+		1: LINEAR,
+		2: LINEAR,
+		3: TRIGONAL_PLANAR,
+		4: TETRAEDRIC,
+		5: BIPIRAMIDAL,
+		6: OCTAEDRIC,
 	},
-	
-	"2_1": {
-		"geometria": "Angular",
-		"arranjo": "Trigonal Plana",
-		"angulo": 117,
-		"exemplo": "SO₂, O₃"
+	"angulos": {
+		LINEAR: [180],
+		TRIGONAL_PLANAR: [120],
+		TETRAEDRIC: [109.5],
+		BIPIRAMIDAL: [90, 120, 180],
+		OCTAEDRIC: [90],
+		ANGULAR: [117],
+		PIRAMIDAL: [107],
+		SEESAW: [90, 120],
+		QUAD_PIRAMIDAL: [90],
+		T_SHAPE: [90],
+		QUAD_PLANAR: [90],
 	},
-	
-	"4_0": {
-		"geometria": "Tetraédrica",
-		"arranjo": "Tetraédrica",
-		"angulo": 109.5,
-		"exemplo": "CH₄, CCl₄"
-	},
-	
-	"3_1": {
-		"geometria": "Piramidal",
-		"arranjo": "Tetraédrica",
-		"angulo": 107,
-		"exemplo": "NH₃, PH₃"
-	},
-	
-	"2_2": {
-		"geometria": "Angular",
-		"arranjo": "Tetraédrica",
-		"angulo": 104.5,
-		"exemplo": "H₂O, H₂S"
-	},
-	
-	"5_0": {
-		"geometria": "Bipiramidal Trigonal",
-		"arranjo": "Bipiramidal Trigonal",
-		"angulo": [90, 120, 180],
-		"exemplo": "PCl₅, PF₅"
-	},
-	
-	"4_1": {
-		"geometria": "Gangorra",
-		"arranjo": "Bipiramidal Trigonal",
-		"angulo": [90, 120],
-		"exemplo": "SF₄, TeCl₄"
-	},
-	
-	"3_2": {
-		"geometria": "Forma de T",
-		"arranjo": "Bipiramidal Trigonal",
-		"angulo": 90,
-		"exemplo": "ClF₃, BrF₃"
-	},
-	
-	"2_3": {
-		"geometria": "Linear",
-		"arranjo": "Bipiramidal Trigonal",
-		"angulo": 180,
-		"exemplo": "XeF₂, I₃⁻"
-	},
-	
-	"6_0": {
-		"geometria": "Octaédrica",
-		"arranjo": "Octaédrica",
-		"angulo": 90,
-		"exemplo": "SF₆, Mo(CO)₆"
-	},
-	
-	"5_1": {
-		"geometria": "Piramidal Quadrada",
-		"arranjo": "Octaédrica",
-		"angulo": 90,
-		"exemplo": "BrF₅, IF₅"
-	},
-	
-	"4_2": {
-		"geometria": "Quadrado Planar",
-		"arranjo": "Octaédrica",
-		"angulo": 90,
-		"exemplo": "XeF₄, ICl₄⁻"
-	}
 }
 
 # Função auxiliar para buscar
 func get_geometry(ligantes: int, livres: int) -> Dictionary:
-	var key = str(ligantes) + "_" + str(livres)
-	if key in GEOMETRIES:
-		return GEOMETRIES[key]
-	return {}
+	var key = [ligantes, livres]
 
-# Função para obter todas as chaves
-func get_all_keys() -> Array:
-	return GEOMETRIES.keys()
+	var dic: Dictionary = {
+		"geometria": null,
+		"arranjo": null,
+		"angulos": []
+	}
+
+	if key in GEOMETRIES["geometrias"]:
+		dic["geometria"] = GEOMETRIES["geometrias"][key] 
+
+	if ligantes + livres in GEOMETRIES["arranjos"]:
+		dic["arranjo"] = GEOMETRIES["arranjos"][ligantes + livres]
+		if dic["geometria"] == null and ligantes > 0:
+			dic["geometria"] = dic["arranjo"] if ligantes != 1 else LINEAR
+
+	if dic["geometria"] in GEOMETRIES["angulos"]:
+		dic["angulos"] = GEOMETRIES["angulos"][dic["geometria"]]
+	
+	return dic
