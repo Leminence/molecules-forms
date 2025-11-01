@@ -1,11 +1,15 @@
 extends Node
 
-@onready var molecule = $Molecule
+@onready var molecule: Node3D = %Molecule
+
+@onready var vsepr_label: Label = %VSEPR
+@onready var geometria_label: Label = %Geometria
+@onready var arranjo_label: Label = %Arranjo
 
 @export var central_atom_color: Color = Color.WHITE
 @export var atom_color: Color = Color.SKY_BLUE
-@export var free_pair_color = Color.BEIGE
-@export var eletron_color = Color.YELLOW
+@export var free_pair_color: Color = Color.BEIGE
+@export var eletron_color: Color = Color.YELLOW
 
 var central_atom: MeshInstance3D
 var atoms: Array = []
@@ -25,13 +29,14 @@ class FreePair extends MeshInstance3D:
 class Bond extends MeshInstance3D:
 	pass
 
-func _ready():
+func _ready() -> void:
 	set_materials()
+	update_molecule_info(atoms)
 	central_atom = create_atom(central_atom_material)
 	molecule.add_child(central_atom)
 
 
-func set_materials():
+func set_materials() -> void:
 	central_atom_material = StandardMaterial3D.new()
 	central_atom_material.albedo_color = central_atom_color
 
@@ -168,20 +173,6 @@ func create_free_pair(material: StandardMaterial3D) -> MeshInstance3D:
 	return ballon
 
 
-func get_perpendicular_vector(direction: Vector3) -> Vector3:
-	# Encontra um vetor perpendicular ao eixo da ligação
-	# Usa o vetor UP como referência, mas evita quando paralelo
-	var reference = Vector3.UP
-	
-	# Se a direção é paralela ao UP, usa outro vetor de referência
-	if abs(direction.dot(Vector3.UP)) > 0.99:
-		reference = Vector3.RIGHT
-	
-	# Produto vetorial para obter um vetor perpendicular
-	var perpendicular = direction.cross(reference).normalized()
-	return perpendicular
-
-
 func set_atoms_position(atoms_array: Array) -> void:
 	var positions = get_geometry_positions(atoms_array.size())
 	
@@ -255,6 +246,34 @@ func get_geometry_positions(num_atoms: int) -> Array:
 				
 	return positions
 
+
+func get_perpendicular_vector(direction: Vector3) -> Vector3:
+	# Encontra um vetor perpendicular ao eixo da ligação
+	# Usa o vetor UP como referência, mas evita quando paralelo
+	var reference = Vector3.UP
+	
+	# Se a direção é paralela ao UP, usa outro vetor de referência
+	if abs(direction.dot(Vector3.UP)) > 0.99:
+		reference = Vector3.RIGHT
+	
+	# Produto vetorial para obter um vetor perpendicular
+	var perpendicular = direction.cross(reference).normalized()
+	return perpendicular
+
+
+func update_molecule_info(molecule_array: Array) -> void:
+	var atom_num: int = 0
+	var freepair_num: int = 0
+	for i in range(molecule_array.size()):
+		if molecule_array[i] is Atom:
+			atom_num += 1
+		elif molecule_array[i] is FreePair:
+			freepair_num += 1
+	
+	vsepr_label.text = "VSEPR:\n - AX" + str(atom_num) + ("E" + (str(freepair_num)if freepair_num > 1 else "") if freepair_num > 0 else "")
+	geometria_label.text = "Geometria:\n - "
+	arranjo_label.text = "Arranjo:\n - "
+
 # Cria um novo átomo e sua ligação ao átomo central ao clicar no botão
 func _on_new_atom_pressed(num: int) -> void:
 	if atoms.size() >= 6:
@@ -266,6 +285,7 @@ func _on_new_atom_pressed(num: int) -> void:
 	atoms.append(new_atom)
 
 	set_atoms_position(atoms)
+	update_molecule_info(atoms)
 	create_bond(central_atom, new_atom, num)
 
 
@@ -279,9 +299,11 @@ func _on_new_pair_pressed():
 	atoms.append(new_pair)
 
 	set_atoms_position(atoms)
+	update_molecule_info(atoms)
 
 
 func _on_reset_button_pressed() -> void:
 	for atom in atoms:
 		atom.queue_free()
 	atoms.clear()
+	update_molecule_info(atoms)

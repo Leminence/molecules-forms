@@ -46,6 +46,7 @@ directional_shadow_fade_start = 1.0
 script = ExtResource("1_yh5la")
 
 [node name="Molecule" type="Node3D" parent="MoleculeGenerator"]
+unique_name_in_owner = true
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("2_2w1kt")
 
@@ -109,33 +110,33 @@ offset_top = -63.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HorizontalBox" type="HBoxContainer" parent="UI/Control/Buttons"]
+[node name="HBox" type="HBoxContainer" parent="UI/Control/Buttons"]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="SimpleButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+[node name="SimpleButton" type="Button" parent="UI/Control/Buttons/HBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Simples"
 
-[node name="DualButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+[node name="DualButton" type="Button" parent="UI/Control/Buttons/HBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Dupla"
 
-[node name="TripleButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+[node name="TripleButton" type="Button" parent="UI/Control/Buttons/HBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Tripla"
 
-[node name="PairButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+[node name="PairButton" type="Button" parent="UI/Control/Buttons/HBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_qvhan")
 text = "Par livre"
 
-[node name="ResetButton" type="Button" parent="UI/Control/Buttons/HorizontalBox"]
+[node name="ResetButton" type="Button" parent="UI/Control/Buttons/HBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_2w1kt")
@@ -150,9 +151,73 @@ text = "Auto rotate"
 alignment = 1
 vertical_icon_alignment = 0
 
-[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/SimpleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [1]]
-[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/DualButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [2]]
-[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/TripleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [3]]
-[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/PairButton" to="MoleculeGenerator" method="_on_new_pair_pressed"]
-[connection signal="pressed" from="UI/Control/Buttons/HorizontalBox/ResetButton" to="MoleculeGenerator" method="_on_reset_button_pressed"]
+[node name="Control" type="Control" parent="UI/Control"]
+custom_minimum_size = Vector2(241.115, 311.965)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/Control/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.14767182, 0.14767179, 0.14767179, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Vbox" type="VBoxContainer" parent="UI/Control/Control/MarginContainer"]
+layout_mode = 2
+
+[node name="Titulo" type="Label" parent="UI/Control/Control/MarginContainer/Vbox"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Molécula atual"
+horizontal_alignment = 1
+
+[node name="Vbox" type="VBoxContainer" parent="UI/Control/Control/MarginContainer/Vbox"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="VSEPR" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "VSEPR:
+ -"
+
+[node name="Geometria" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Geometria:
+ -"
+
+[node name="Arranjo" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Arranjo:
+ -"
+
+[connection signal="pressed" from="UI/Control/Buttons/HBox/SimpleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [1]]
+[connection signal="pressed" from="UI/Control/Buttons/HBox/DualButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [2]]
+[connection signal="pressed" from="UI/Control/Buttons/HBox/TripleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [3]]
+[connection signal="pressed" from="UI/Control/Buttons/HBox/PairButton" to="MoleculeGenerator" method="_on_new_pair_pressed"]
+[connection signal="pressed" from="UI/Control/Buttons/HBox/ResetButton" to="MoleculeGenerator" method="_on_reset_button_pressed"]
 [connection signal="toggled" from="UI/Control/Buttons/AutoRotate" to="MoleculeGenerator/Molecule" method="_on_auto_rotate_toggled"]
