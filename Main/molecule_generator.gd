@@ -11,6 +11,8 @@ extends Node
 @export var free_pair_color: Color = Color.BEIGE
 @export var eletron_color: Color = Color.YELLOW
 
+@onready var molecular_data = preload("res://Main/molecule_data.gd").new()
+
 var central_atom: MeshInstance3D
 var atoms: Array = []
 
@@ -271,8 +273,11 @@ func update_molecule_info(molecule_array: Array) -> void:
 			freepair_num += 1
 	
 	vsepr_label.text = "VSEPR:\n - AX" + str(atom_num) + ("E" + (str(freepair_num)if freepair_num > 1 else "") if freepair_num > 0 else "")
-	geometria_label.text = "Geometria:\n - "
-	arranjo_label.text = "Arranjo:\n - "
+	
+	var data = molecular_data.get_geometry(atom_num, freepair_num)
+
+	geometria_label.text = "Geometria:\n - " + (data["geometria"] if atom_num > 1 else "")
+	arranjo_label.text = ("Arranjo:\n - " + data["arranjo"] if atom_num > 1 and freepair_num > 0 else "")
 
 # Cria um novo átomo e sua ligação ao átomo central ao clicar no botão
 func _on_new_atom_pressed(num: int) -> void:
