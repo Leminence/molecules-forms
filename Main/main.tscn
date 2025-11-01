@@ -1,12 +1,26 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkjssp4pyxg02"]
+[gd_scene load_steps=10 format=3 uid="uid://bkjssp4pyxg02"]
 
 [ext_resource type="Script" uid="uid://d02cro01njgvn" path="res://Main/molecule_generator.gd" id="1_yh5la"]
 [ext_resource type="Script" uid="uid://b6100dawfd0rx" path="res://Main/molecule.gd" id="2_2w1kt"]
 [ext_resource type="Theme" uid="uid://ce77h3abtsovv" path="res://UI/Themes/main_theme.tres" id="3_qvhan"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qvhan"]
+sky_top_color = Color(0.34725773, 0.41377547, 0.50693035, 1)
+sky_horizon_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+sky_curve = 4.1785545
+sky_cover_modulate = Color(0, 0, 0, 1)
+ground_bottom_color = Color(0.34901962, 0.41568628, 0.5058824, 1)
+ground_horizon_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+ground_curve = 4.94546
+sun_curve = 5.9094896
+
+[sub_resource type="Sky" id="Sky_eunhr"]
+sky_material = SubResource("ProceduralSkyMaterial_qvhan")
+
 [sub_resource type="Environment" id="Environment_yh5la"]
-background_mode = 1
+background_mode = 2
 background_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+sky = SubResource("Sky_eunhr")
 ambient_light_source = 3
 ambient_light_color = Color(0.18000486, 0.1800049, 0.18000478, 1)
 ambient_light_sky_contribution = 0.5
@@ -84,8 +98,8 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="UI/Control/3DView/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
-fov = 65.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.2)
+fov = 69.0
 size = 4.0
 
 [node name="Title" type="Label" parent="UI/Control"]

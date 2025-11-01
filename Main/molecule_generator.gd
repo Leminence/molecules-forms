@@ -42,9 +42,11 @@ func _ready() -> void:
 func set_materials() -> void:
 	central_atom_material = StandardMaterial3D.new()
 	central_atom_material.albedo_color = central_atom_color
+	central_atom_material.roughness = 0.8
 
 	atom_material = StandardMaterial3D.new()
 	atom_material.albedo_color = atom_color
+	atom_material.roughness = 0.8
 
 	free_pair_material = StandardMaterial3D.new()
 	free_pair_material.albedo_color = free_pair_color
@@ -53,6 +55,7 @@ func set_materials() -> void:
 
 	eletron_material = StandardMaterial3D.new()
 	eletron_material.albedo_color = eletron_color
+	eletron_material.diffuse_mode = BaseMaterial3D.DIFFUSE_LAMBERT_WRAP
 
 	bond_material = StandardMaterial3D.new()
 	var gradient = Gradient.new()
@@ -69,7 +72,8 @@ func set_materials() -> void:
 	bond_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	bond_material.albedo_texture = grad_tex
 	bond_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	bond_material.albedo_color.a = 0.8
+	bond_material.albedo_color.a = 1.0
+	bond_material.roughness = 0.8
 
 
 func create_atom(material: StandardMaterial3D) -> MeshInstance3D:
@@ -198,6 +202,25 @@ func set_atoms_position(atoms_array: Array) -> void:
 		
 		atoms_array[i].look_at(central_atom.global_position, Vector3.UP)
 		atoms_array[i].rotate_object_local(Vector3.RIGHT, PI/2)
+		reset_physics_interpolation()
+
+
+func update_molecule_info(molecule_array: Array) -> void:
+	var atom_num: int = 0
+	var freepair_num: int = 0
+	for i in range(molecule_array.size()):
+		if molecule_array[i] is Atom:
+			atom_num += 1
+		elif molecule_array[i] is FreePair:
+			freepair_num += 1
+	
+	vsepr_label.text = "VSEPR:\n - AX" + str(atom_num) + ("E" + (str(freepair_num)if freepair_num > 1 else "") if freepair_num > 0 else "")
+	
+	var data = molecular_data.get_geometry(atom_num, freepair_num)
+
+	geometria_label.text = "Geometria:\n - " + (data["geometria"] if data["geometria"] else "")
+	arranjo_label.text = "Arranjo:\n - " + (data["arranjo"] if data["arranjo"] else "")
+	angulos_label.text = "Angulos:\n - " + str(data["angulos"])
 
 
 func get_geometry_positions(num_atoms: int) -> Array:
@@ -248,24 +271,6 @@ func get_geometry_positions(num_atoms: int) -> Array:
 				positions.append(Vector3(cos(angle) * radius, 0, sin(angle) * radius))
 				
 	return positions
-
-
-func update_molecule_info(molecule_array: Array) -> void:
-	var atom_num: int = 0
-	var freepair_num: int = 0
-	for i in range(molecule_array.size()):
-		if molecule_array[i] is Atom:
-			atom_num += 1
-		elif molecule_array[i] is FreePair:
-			freepair_num += 1
-	
-	vsepr_label.text = "VSEPR:\n - AX" + str(atom_num) + ("E" + (str(freepair_num)if freepair_num > 1 else "") if freepair_num > 0 else "")
-	
-	var data = molecular_data.get_geometry(atom_num, freepair_num)
-
-	geometria_label.text = "Geometria:\n - " + (data["geometria"] if data["geometria"] else "")
-	arranjo_label.text = "Arranjo:\n - " + (data["arranjo"] if data["arranjo"] else "")
-	angulos_label.text = "Angulos:\n - " + str(data["angulos"])
 
 
 func get_perpendicular_vector(direction: Vector3) -> Vector3:

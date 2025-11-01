@@ -2,17 +2,17 @@
 extends Node
 
 const LINEAR: String = "Linear"
-const TRIGONAL_PLANAR = "Trigonal plana"
-const TETRAEDRIC = "Tetraédrica"
-const BIPIRAMIDAL = "Bipiramidal Trigonal"
-const OCTAEDRIC = "Octaédrica"
+const TRIGONAL_PLANAR: String = "Trigonal planar"
+const TETRAEDRIC: String = "Tetraédrica"
+const BIPIRAMIDAL: String = "Bipirâmide trigonal"
+const OCTAEDRIC: String = "Octaédrica"
 
 const ANGULAR: String = "Angular"
-const PIRAMIDAL: String = "Piramidal"
+const PIRAMIDAL: String = "Pirâmide"
 const SEESAW: String = "Gangorra"
-const QUAD_PIRAMIDAL: String = "Piramidal Quadrada"
+const QUAD_PIRAMIDAL: String = "Pirâmide quadrada"
 const T_SHAPE: String = "Forma de T"
-const QUAD_PLANAR: String = "Quadrado Planar"
+const QUAD_PLANAR: String = "Quadrado planar"
 
 const GEOMETRIES = {
 	"geometrias": {
