@@ -14,7 +14,7 @@ const QUAD_PIRAMIDAL: String = "Pirâmide quadrada"
 const T_SHAPE: String = "Forma de T"
 const QUAD_PLANAR: String = "Quadrado planar"
 
-const GEOMETRIES = {
+const GEOMETRIES: Dictionary[String, Dictionary] = {
 	"geometrias": {
 		[2, 1]: ANGULAR,
 		[3, 1]: PIRAMIDAL,
