@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://ce77h3abtsovv"]
+[gd_resource type="Theme" format=3 uid="uid://ce77h3abtsovv"]
 
-[ext_resource type="StyleBox" uid="uid://5ijshcpmk2r8" path="res://UI/Themes/check_button_theme.tres" id="1_80vjt"]
+[ext_resource type="StyleBox" uid="uid://5ijshcpmk2r8" path="res://ui/themes/check_button_theme.tres" id="1_80vjt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yh5la"]
 content_margin_top = 10.0

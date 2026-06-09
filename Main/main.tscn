@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkjssp4pyxg02"]
+[gd_scene format=3 uid="uid://bkjssp4pyxg02"]
 
-[ext_resource type="Script" uid="uid://d02cro01njgvn" path="res://Main/molecule_generator.gd" id="1_yh5la"]
-[ext_resource type="Script" uid="uid://b6100dawfd0rx" path="res://Main/molecule.gd" id="2_2w1kt"]
-[ext_resource type="Theme" uid="uid://ce77h3abtsovv" path="res://UI/Themes/main_theme.tres" id="3_qvhan"]
+[ext_resource type="Script" uid="uid://c5ympaplvjid" path="res://main/scripts/main.gd" id="1_4dugh"]
+[ext_resource type="Script" uid="uid://b6100dawfd0rx" path="res://main/scripts/molecule.gd" id="2_2w1kt"]
+[ext_resource type="Script" uid="uid://cg7scdveaqhou" path="res://main/scripts/placer_tool.gd" id="2_4dugh"]
+[ext_resource type="Theme" uid="uid://ce77h3abtsovv" path="res://ui/themes/main_theme.tres" id="3_qvhan"]
+[ext_resource type="Script" uid="uid://bwo7mqyb4kn40" path="res://main/scripts/main_camera.gd" id="4_3wy1v"]
+[ext_resource type="Script" uid="uid://8fet1hym1l22" path="res://main/scripts/axis_indicator_builder.gd" id="4_c651c"]
+[ext_resource type="Script" uid="uid://dkvwxhpipv1q4" path="res://main/scripts/side_panel.gd" id="7_4dugh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qvhan"]
 sky_top_color = Color(0.34725773, 0.41377547, 0.50693035, 1)
@@ -28,47 +32,54 @@ reflected_light_source = 1
 adjustment_enabled = true
 adjustment_brightness = 1.1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qvhan"]
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.67135507, 0.5657149, 0.6070191, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kfbq2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
-corner_radius_bottom_right = 3
+corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w1kt"]
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.7352463, 0.12414821, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wy1v"]
+bg_color = Color(0.15847242, 0.15847227, 0.15847233, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.31431612, 0.31431612, 0.3143161, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
-corner_radius_bottom_right = 3
+corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="LabelSettings" id="LabelSettings_qvhan"]
+[node name="Main" type="Node" unique_id=1023828138 node_paths=PackedStringArray("camera")]
+script = ExtResource("1_4dugh")
+camera = NodePath("UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView/SubViewport/MainCamera")
 
-[node name="Main" type="Node"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1934531487]
 environment = SubResource("Environment_yh5la")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2064500383]
 transform = Transform3D(0.9711343, 0.11926673, -0.20657603, 0, 0.8660254, 0.5, 0.23853347, -0.48556715, 0.84102696, 0, 0, 0)
+layers = 3
 directional_shadow_mode = 0
 directional_shadow_fade_start = 1.0
 
-[node name="MoleculeGenerator" type="Node" parent="."]
-script = ExtResource("1_yh5la")
+[node name="PlacerTool" type="Node" parent="." unique_id=1450123679]
+script = ExtResource("2_4dugh")
 
-[node name="Molecule" type="Node3D" parent="MoleculeGenerator"]
+[node name="Molecule" type="Node3D" parent="." unique_id=1598166332]
 unique_name_in_owner = true
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("2_2w1kt")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1933350296]
 
-[node name="Control" type="Control" parent="UI"]
+[node name="MainUI" type="Control" parent="UI" unique_id=1673747784]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,173 +91,143 @@ size_flags_vertical = 3
 focus_behavior_recursive = 1
 mouse_filter = 2
 theme = ExtResource("3_qvhan")
+metadata/_edit_use_anchors_ = true
 
-[node name="3DView" type="SubViewportContainer" parent="UI/Control"]
+[node name="Background" type="MarginContainer" parent="UI/MainUI" unique_id=1950494791]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.0
-stretch = true
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="SubViewport" type="SubViewport" parent="UI/Control/3DView"]
-handle_input_locally = false
-size = Vector2i(1152, 648)
-render_target_update_mode = 4
+[node name="ColorRect" type="ColorRect" parent="UI/MainUI/Background" unique_id=883138913]
+layout_mode = 2
+color = Color(0.078431375, 0.078431375, 0.078431375, 1)
 
-[node name="Camera3D" type="Camera3D" parent="UI/Control/3DView/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.2)
-fov = 69.0
-size = 4.0
-
-[node name="Title" type="Label" parent="UI/Control"]
+[node name="Principal" type="VBoxContainer" parent="UI/MainUI" unique_id=1572946059]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -214.0
-offset_top = 10.0
-offset_right = 214.0
-offset_bottom = 38.0
-grow_horizontal = 2
-text = "Simulador de geometria e arranjo molecular"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Buttons" type="MarginContainer" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -63.0
 grow_horizontal = 2
-grow_vertical = 0
-
-[node name="HBox" type="HBoxContainer" parent="UI/Control/Buttons"]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="SimpleButton" type="Button" parent="UI/Control/Buttons/HBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Simples"
-
-[node name="DualButton" type="Button" parent="UI/Control/Buttons/HBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Dupla"
-
-[node name="TripleButton" type="Button" parent="UI/Control/Buttons/HBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Tripla"
-
-[node name="PairButton" type="Button" parent="UI/Control/Buttons/HBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_qvhan")
-text = "Par livre"
-
-[node name="ResetButton" type="Button" parent="UI/Control/Buttons/HBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2w1kt")
-text = "Reset"
-
-[node name="AutoRotate" type="CheckButton" parent="UI/Control/Buttons"]
-custom_minimum_size = Vector2(165.41, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-button_pressed = true
-text = "Auto rotate"
-alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Control" type="Control" parent="UI/Control"]
-custom_minimum_size = Vector2(260, 330)
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 0
 grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopPanel" type="PanelContainer" parent="UI/MainUI/Principal" unique_id=1708642843]
+layout_mode = 2
 focus_behavior_recursive = 1
 
-[node name="ColorRect" type="ColorRect" parent="UI/Control/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.14767182, 0.14767179, 0.14767179, 1)
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/Control/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_right = 20
-
-[node name="Vbox" type="VBoxContainer" parent="UI/Control/Control/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/TopPanel" unique_id=472314330]
 layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 0
 
-[node name="Titulo" type="Label" parent="UI/Control/Control/MarginContainer/Vbox"]
+[node name="Vbox" type="HBoxContainer" parent="UI/MainUI/Principal/TopPanel/MarginContainer" unique_id=851580747]
 layout_mode = 2
-size_flags_vertical = 0
-text = "Molécula atual"
-horizontal_alignment = 1
+theme_override_constants/separation = 6
 
-[node name="Vbox" type="VBoxContainer" parent="UI/Control/Control/MarginContainer/Vbox"]
+[node name="Margin" type="MarginContainer" parent="UI/MainUI/Principal" unique_id=16939197]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="VSEPR" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+[node name="PanelsDivider" type="HSplitContainer" parent="UI/MainUI/Principal/Margin" unique_id=826774479]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+split_offsets = PackedInt32Array(692)
+split_offset = 692
+
+[node name="3DPanel" type="PanelContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider" unique_id=215308280]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_kfbq2")
+
+[node name="3DView" type="SubViewportContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel" unique_id=1614834645]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+stretch = true
+mouse_target = true
+
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView" unique_id=330914518]
+handle_input_locally = false
+size = Vector2i(974, 630)
+render_target_update_mode = 4
+
+[node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView/SubViewport" unique_id=969331975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+cull_mask = 1048573
+fov = 40.0
+size = 4.0
+script = ExtResource("4_3wy1v")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel" unique_id=576856160]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="AxisViewContainer" type="SubViewportContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer" unique_id=873792106]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(300, 300)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=1690004587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+cull_mask = 1048574
+projection = 1
+size = 2.0
+
+[node name="AxisIndicatorBuilder" type="Node3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=2083230994 node_paths=PackedStringArray("target_molecule")]
+script = ExtResource("4_c651c")
+target_molecule = NodePath("../../../../../../../../../../Molecule")
+
+[node name="SidePanel" type="PanelContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider" unique_id=2055327877]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
-text = "VSEPR:
- -"
-label_settings = SubResource("LabelSettings_qvhan")
+focus_behavior_recursive = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3wy1v")
+script = ExtResource("7_4dugh")
 
-[node name="Geometria" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
-unique_name_in_owner = true
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel" unique_id=867625275]
+layout_mode = 2
+
+[node name="Vbox" type="VBoxContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer" unique_id=170467162]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=367197869]
+layout_mode = 2
+text = "Átomos atuais:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=385428553]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Geometria:
- -"
-label_settings = SubResource("LabelSettings_qvhan")
 
-[node name="Arranjo" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
+[node name="AtomList" type="VBoxContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox/ScrollContainer" unique_id=985762008]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Arranjo:
- -"
-label_settings = SubResource("LabelSettings_qvhan")
-
-[node name="Angulos" type="Label" parent="UI/Control/Control/MarginContainer/Vbox/Vbox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-text = "Angulos:
- -"
-label_settings = SubResource("LabelSettings_qvhan")
-
-[connection signal="pressed" from="UI/Control/Buttons/HBox/SimpleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [1]]
-[connection signal="pressed" from="UI/Control/Buttons/HBox/DualButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [2]]
-[connection signal="pressed" from="UI/Control/Buttons/HBox/TripleButton" to="MoleculeGenerator" method="_on_new_atom_pressed" binds= [3]]
-[connection signal="pressed" from="UI/Control/Buttons/HBox/PairButton" to="MoleculeGenerator" method="_on_new_pair_pressed"]
-[connection signal="pressed" from="UI/Control/Buttons/HBox/ResetButton" to="MoleculeGenerator" method="_on_reset_button_pressed"]
-[connection signal="toggled" from="UI/Control/Buttons/AutoRotate" to="MoleculeGenerator/Molecule" method="_on_auto_rotate_toggled"]
