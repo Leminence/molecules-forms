@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://b5xl8fmj0sr4a"]
+
+[ext_resource type="Script" uid="uid://c620l82xj1r51" path="res://main/scripts/atom_container.gd" id="1_2w2u5"]
+
+[node name="AtomPanel" type="PanelContainer" unique_id=1536104288 node_paths=PackedStringArray("atom_name_label", "atom_delete_button")]
+custom_minimum_size = Vector2(0, 30)
+script = ExtResource("1_2w2u5")
+atom_name_label = NodePath("MarginContainer/AtomContainer/AtomName")
+atom_delete_button = NodePath("MarginContainer/AtomContainer/AspectRatioContainer/Button")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2107175592]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 21
+theme_override_constants/margin_bottom = 5
+
+[node name="AtomContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1506031431]
+layout_mode = 2
+
+[node name="AtomName" type="Label" parent="MarginContainer/AtomContainer" unique_id=1368412822]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Atom"
+vertical_alignment = 1
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/AtomContainer" unique_id=77302064]
+layout_mode = 2
+size_flags_horizontal = 10
+stretch_mode = 1
+
+[node name="Button" type="Button" parent="MarginContainer/AtomContainer/AspectRatioContainer" unique_id=959985777]
+layout_mode = 2
+size_flags_vertical = 4
+text = "✕"

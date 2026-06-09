@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bwo7mqyb4kn40" path="res://main/scripts/main_camera.gd" id="4_3wy1v"]
 [ext_resource type="Script" uid="uid://8fet1hym1l22" path="res://main/scripts/axis_indicator_builder.gd" id="4_c651c"]
 [ext_resource type="Script" uid="uid://dkvwxhpipv1q4" path="res://main/scripts/side_panel.gd" id="7_4dugh"]
+[ext_resource type="PackedScene" uid="uid://b5xl8fmj0sr4a" path="res://main/atom_panel.tscn" id="8_67ri8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qvhan"]
 sky_top_color = Color(0.34725773, 0.41377547, 0.50693035, 1)
@@ -119,6 +120,7 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="TopPanel" type="PanelContainer" parent="UI/MainUI/Principal" unique_id=1708642843]
+visible = false
 layout_mode = 2
 focus_behavior_recursive = 1
 
@@ -166,11 +168,11 @@ mouse_target = true
 
 [node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView" unique_id=330914518]
 handle_input_locally = false
-size = Vector2i(974, 630)
+size = Vector2i(984, 636)
 render_target_update_mode = 4
 
 [node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView/SubViewport" unique_id=969331975]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 cull_mask = 1048573
 fov = 40.0
 size = 4.0
@@ -186,7 +188,7 @@ theme_override_constants/margin_bottom = 0
 
 [node name="AxisViewContainer" type="SubViewportContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer" unique_id=873792106]
@@ -211,12 +213,18 @@ layout_mode = 2
 focus_behavior_recursive = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_3wy1v")
 script = ExtResource("7_4dugh")
+atom_container_scene = ExtResource("8_67ri8")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel" unique_id=867625275]
 layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
 [node name="Vbox" type="VBoxContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer" unique_id=170467162]
 layout_mode = 2
+theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=367197869]
 layout_mode = 2
@@ -231,3 +239,4 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 5

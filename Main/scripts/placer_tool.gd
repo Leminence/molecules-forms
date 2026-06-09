@@ -21,10 +21,13 @@ var _preview_line: MeshInstance3D = null  # linha fantasma durante o drag
 
 const ATOM_RADIUS := 0.25
 const EDGE_RADIUS := 0.08
+
 const COLOR_ATOM := Color(0.4, 0.7, 1.0)
 const COLOR_BOND := Color(0.85, 0.85, 0.85)
 const COLOR_PREVIEW := Color(1.0, 1.0, 1.0, 0.3)
+
 const PLACEMENT_PLANE := Plane(Vector3.UP, 0.0)
+const PLACEMENT_DISTANCE := 5.0  # distância à frente da câmera
 
 func setup(molecule: Node3D, camera: Camera3D) -> void:
 	_molecule = molecule
@@ -168,7 +171,6 @@ func _place_atom(world_pos: Vector3) -> MeshInstance3D:
 	atom_added.emit(atom)
 	return atom
 
-
 # Ligação
 func _create_bond(atom_a: MeshInstance3D, atom_b: MeshInstance3D, amount: int) -> void:
 	var pos_a := atom_a.global_position
@@ -259,7 +261,6 @@ func _cycle_bond(bond_root: Node3D) -> void:
 	var atom_b: MeshInstance3D = bond_root.get_meta("atom_b")
 	_fill_bond_meshes(bond_root, atom_a.global_position, atom_b.global_position, next)
 
-
 # Picking
 func _pick_atom(screen_pos: Vector2) -> MeshInstance3D:
 	var result = _raycast(screen_pos)
@@ -288,8 +289,6 @@ func _raycast(screen_pos: Vector2) -> Dictionary:
 	var query  := PhysicsRayQueryParameters3D.create(origin, end)
 	return space.intersect_ray(query)
 
-
-const PLACEMENT_DISTANCE := 5.0  # distância à frente da câmera
 
 func _raycast_plane(screen_pos: Vector2, reference_pos: Vector3 = Vector3.INF) -> Variant:
 	# Se tiver uma posição de referência, usa a distância real até ela
@@ -320,9 +319,7 @@ func _get_perpendicular(dir: Vector3) -> Vector3:
 	var ref := Vector3.UP if abs(dir.dot(Vector3.UP)) < 0.99 else Vector3.RIGHT
 	return dir.cross(ref).normalized()
 
-
-# ─── API pública ──────────────────────────────────────────
-
+# API pública
 func delete_atom(atom: MeshInstance3D) -> void:
 	if not is_instance_valid(atom):
 		return
