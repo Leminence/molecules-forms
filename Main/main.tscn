@@ -82,8 +82,10 @@ script = ExtResource("2_2w1kt")
 visible = false
 billboard = 1
 no_depth_test = true
-texture_filter = 1
+texture_filter = 0
 text = "H"
+font_size = 100
+outline_size = 0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1933350296]
 

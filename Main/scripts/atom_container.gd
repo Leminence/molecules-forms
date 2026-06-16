@@ -16,5 +16,6 @@ func setup_atom_container(atom: MeshInstance3D) -> void:
 	atom_position_label.text = "Pos: <%.2f, %.2f, %.2f>" % [pos.x, pos.y, pos.z]
 	atom_delete_button.pressed.connect(_on_delete_pressed)
 
+
 func _on_delete_pressed() -> void:
 	delete_requested.emit(_atom)
