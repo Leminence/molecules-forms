@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://bcp3km004b7sr"]
+
+[ext_resource type="Script" uid="uid://d2if5sc0evrad" path="res://data/element.gd" id="1_12ayg"]
+
+[resource]
+script = ExtResource("1_12ayg")
+element_name = "Hydrogen"
+symbol = "H"
+atomic_number = 1
+atom_color = Color(0.26620898, 0.6573324, 0.80591995, 1)
+metadata/_custom_type_script = "uid://d2if5sc0evrad"

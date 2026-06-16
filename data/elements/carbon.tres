@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://c8tswxgjyfa6h"]
+
+[ext_resource type="Script" uid="uid://d2if5sc0evrad" path="res://data/element.gd" id="1_yid56"]
+
+[resource]
+script = ExtResource("1_yid56")
+element_name = "Carbon"
+symbol = "C"
+atomic_number = 6
+atom_color = Color(0.3553136, 0.35531354, 0.35531357, 1)
+metadata/_custom_type_script = "uid://d2if5sc0evrad"

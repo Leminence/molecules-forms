@@ -17,7 +17,12 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 config/name="molecules-forms"
 run/main_scene="uid://bkjssp4pyxg02"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+run/max_fps=60
 config/icon="res://assets/icon.svg"
+
+[autoload]
+
+ChemistryData="*uid://b644g7gdw4f01"
 
 [display]
 

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://mju1dhf6rk36"]
+
+[ext_resource type="Script" uid="uid://d2if5sc0evrad" path="res://data/element.gd" id="1_qs4fb"]
+
+[resource]
+script = ExtResource("1_qs4fb")
+element_name = "Nitrogen"
+symbol = "N"
+atomic_number = 7
+atom_color = Color(0.601647, 0.80511725, 0.8705388, 1)
+metadata/_custom_type_script = "uid://d2if5sc0evrad"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://c5nus0sthc0iv"]
+
+[ext_resource type="Script" uid="uid://d2if5sc0evrad" path="res://data/element.gd" id="1_w6xuo"]
+
+[resource]
+script = ExtResource("1_w6xuo")
+element_name = "Oxygen"
+symbol = "O"
+atomic_number = 8
+atom_color = Color(0.90205187, 0.9540456, 0.9713945, 1)
+metadata/_custom_type_script = "uid://d2if5sc0evrad"

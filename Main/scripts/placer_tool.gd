@@ -19,10 +19,6 @@ var _is_dragging: bool = false
 var _drag_origin_atom: MeshInstance3D = null
 var _preview_line: MeshInstance3D = null  # linha fantasma durante o drag
 
-const ATOM_RADIUS := 0.25
-const EDGE_RADIUS := 0.08
-
-const COLOR_ATOM := Color(0.4, 0.7, 1.0)
 const COLOR_BOND := Color(0.85, 0.85, 0.85)
 const COLOR_PREVIEW := Color(1.0, 1.0, 1.0, 0.3)
 
@@ -139,28 +135,18 @@ func _clear_preview() -> void:
 
 # Átomo
 func _place_atom(world_pos: Vector3) -> MeshInstance3D:
+	var element: Element = ChemistryData.element_selected
+
 	_atom_id += 1
 
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = COLOR_ATOM
-	mat.roughness = 0.4
-	mat.metallic = 0.1
-
-	var sphere := SphereMesh.new()
-	sphere.radius = ATOM_RADIUS
-	sphere.height = ATOM_RADIUS * 2.0
-
-	var atom := MeshInstance3D.new()
-	atom.mesh = sphere
-	atom.material_override = mat
-	atom.name = "Atom_%d" % _atom_id
+	var atom : Atom = Atom.new(element)
 	atom.position = _molecule.to_local(world_pos)
+	atom.name = "%d - %s" % [_atom_id, element.symbol]
 	atom.set_meta("is_atom", true)
 
-	var body := StaticBody3D.new()
-	var col := CollisionShape3D.new()
-	var shape := SphereShape3D.new()
-	shape.radius = ATOM_RADIUS
+	var body: StaticBody3D = StaticBody3D.new()
+	var col: CollisionShape3D = CollisionShape3D.new()
+	var shape: SphereShape3D = SphereShape3D.new()
 	col.shape = shape
 	body.add_child(col)
 	body.set_meta("owner_atom", atom)

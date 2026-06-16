@@ -3,7 +3,9 @@
 [ext_resource type="StyleBox" uid="uid://5ijshcpmk2r8" path="res://ui/themes/check_button_theme.tres" id="1_80vjt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yh5la"]
+content_margin_left = 10.0
 content_margin_top = 10.0
+content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.34476736, 0.60966694, 0.93076897, 1)
 corner_radius_top_left = 4

@@ -59,7 +59,7 @@ corner_radius_bottom_left = 4
 
 [node name="Main" type="Node" unique_id=1023828138 node_paths=PackedStringArray("camera")]
 script = ExtResource("1_4dugh")
-camera = NodePath("UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView/SubViewport/MainCamera")
+camera = NodePath("UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView/SubViewport/MainCamera")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1934531487]
 environment = SubResource("Environment_yh5la")
@@ -77,6 +77,13 @@ script = ExtResource("2_4dugh")
 unique_name_in_owner = true
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("2_2w1kt")
+
+[node name="Label3D" type="Label3D" parent="Molecule" unique_id=1771933285]
+visible = false
+billboard = 1
+no_depth_test = true
+texture_filter = 1
+text = "H"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1933350296]
 
@@ -119,45 +126,45 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="TopPanel" type="PanelContainer" parent="UI/MainUI/Principal" unique_id=1708642843]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal" unique_id=1358913634]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainUI/Principal/MarginContainer" unique_id=140106588]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TopPanel" type="PanelContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer" unique_id=1708642843]
 visible = false
 layout_mode = 2
 focus_behavior_recursive = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/TopPanel" unique_id=472314330]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel" unique_id=472314330]
 layout_mode = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 6
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="Vbox" type="HBoxContainer" parent="UI/MainUI/Principal/TopPanel/MarginContainer" unique_id=851580747]
+[node name="Vbox" type="HBoxContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer" unique_id=851580747]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Margin" type="MarginContainer" parent="UI/MainUI/Principal" unique_id=16939197]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="PanelsDivider" type="HSplitContainer" parent="UI/MainUI/Principal/Margin" unique_id=826774479]
+[node name="PanelsDivider" type="HSplitContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer" unique_id=826774479]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_constants/separation = 0
-split_offsets = PackedInt32Array(692)
-split_offset = 692
+split_offsets = PackedInt32Array(-300)
+split_offset = -300
 
-[node name="3DPanel" type="PanelContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider" unique_id=215308280]
+[node name="3DPanel" type="PanelContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider" unique_id=215308280]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kfbq2")
 
-[node name="3DView" type="SubViewportContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel" unique_id=1614834645]
+[node name="3DView" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel" unique_id=1614834645]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -166,19 +173,19 @@ size_flags_stretch_ratio = 0.0
 stretch = true
 mouse_target = true
 
-[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView" unique_id=330914518]
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView" unique_id=330914518]
 handle_input_locally = false
-size = Vector2i(984, 636)
+size = Vector2i(820, 624)
 render_target_update_mode = 4
 
-[node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/3DView/SubViewport" unique_id=969331975]
+[node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView/SubViewport" unique_id=969331975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 cull_mask = 1048573
 fov = 40.0
 size = 4.0
 script = ExtResource("4_3wy1v")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel" unique_id=576856160]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel" unique_id=576856160]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 0
@@ -186,57 +193,65 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="AxisViewContainer" type="SubViewportContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
+[node name="AxisViewContainer" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer" unique_id=873792106]
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer" unique_id=873792106]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(300, 300)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=1690004587]
+[node name="Camera3D" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=1690004587]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 cull_mask = 1048574
 projection = 1
 size = 2.0
 
-[node name="AxisIndicatorBuilder" type="Node3D" parent="UI/MainUI/Principal/Margin/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=2083230994 node_paths=PackedStringArray("target_molecule")]
+[node name="AxisIndicatorBuilder" type="Node3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=2083230994 node_paths=PackedStringArray("target_molecule")]
 script = ExtResource("4_c651c")
-target_molecule = NodePath("../../../../../../../../../../Molecule")
+target_molecule = NodePath("../../../../../../../../../../../Molecule")
 
-[node name="SidePanel" type="PanelContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider" unique_id=2055327877]
+[node name="SidePanel" type="PanelContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider" unique_id=2055327877]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 focus_behavior_recursive = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_3wy1v")
 script = ExtResource("7_4dugh")
 atom_container_scene = ExtResource("8_67ri8")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel" unique_id=867625275]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel" unique_id=867625275]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
 
-[node name="Vbox" type="VBoxContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer" unique_id=170467162]
+[node name="Vbox" type="VBoxContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer" unique_id=170467162]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=367197869]
+[node name="Label" type="Label" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=1806184691]
+layout_mode = 2
+text = "Posicionando:"
+
+[node name="ElementOption" type="OptionButton" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=140192962]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150.655, 0)
+layout_mode = 2
+
+[node name="Label1" type="Label" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=367197869]
 layout_mode = 2
 text = "Átomos atuais:"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=385428553]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox" unique_id=385428553]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="AtomList" type="VBoxContainer" parent="UI/MainUI/Principal/Margin/PanelsDivider/SidePanel/MarginContainer/Vbox/ScrollContainer" unique_id=985762008]
+[node name="AtomList" type="VBoxContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox/ScrollContainer" unique_id=985762008]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 5
+
+[connection signal="item_selected" from="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox/ElementOption" to="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel" method="_on_element_option_item_selected"]

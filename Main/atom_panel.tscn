@@ -1,34 +1,44 @@
 [gd_scene format=3 uid="uid://b5xl8fmj0sr4a"]
 
+[ext_resource type="Theme" uid="uid://ce77h3abtsovv" path="res://ui/themes/main_theme.tres" id="1_2m34p"]
 [ext_resource type="Script" uid="uid://c620l82xj1r51" path="res://main/scripts/atom_container.gd" id="1_2w2u5"]
 
-[node name="AtomPanel" type="PanelContainer" unique_id=1536104288 node_paths=PackedStringArray("atom_name_label", "atom_delete_button")]
-custom_minimum_size = Vector2(0, 30)
+[node name="AtomPanel" type="PanelContainer" unique_id=1536104288 node_paths=PackedStringArray("atom_name_label", "atom_position_label", "atom_delete_button")]
+custom_minimum_size = Vector2(200, 30)
+theme = ExtResource("1_2m34p")
 script = ExtResource("1_2w2u5")
-atom_name_label = NodePath("MarginContainer/AtomContainer/AtomName")
+atom_name_label = NodePath("MarginContainer/AtomContainer/VBoxContainer/AtomName")
+atom_position_label = NodePath("MarginContainer/AtomContainer/VBoxContainer/AtomPos")
 atom_delete_button = NodePath("MarginContainer/AtomContainer/AspectRatioContainer/Button")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2107175592]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 21
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 10
 
 [node name="AtomContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1506031431]
 layout_mode = 2
 
-[node name="AtomName" type="Label" parent="MarginContainer/AtomContainer" unique_id=1368412822]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/AtomContainer" unique_id=1230871173]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="AtomName" type="Label" parent="MarginContainer/AtomContainer/VBoxContainer" unique_id=1368412822]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Atom"
 vertical_alignment = 1
 
+[node name="AtomPos" type="Label" parent="MarginContainer/AtomContainer/VBoxContainer" unique_id=482591717]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Pos: <0.00, 0.00, 0.00>"
+
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/AtomContainer" unique_id=77302064]
 layout_mode = 2
 size_flags_horizontal = 10
-stretch_mode = 1
+stretch_mode = 3
+alignment_horizontal = 2
 
 [node name="Button" type="Button" parent="MarginContainer/AtomContainer/AspectRatioContainer" unique_id=959985777]
 layout_mode = 2

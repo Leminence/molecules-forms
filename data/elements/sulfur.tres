@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://clocesqwtx46d"]
+
+[ext_resource type="Script" uid="uid://d2if5sc0evrad" path="res://data/element.gd" id="1_0fd3u"]
+
+[resource]
+script = ExtResource("1_0fd3u")
+element_name = "Sulfur"
+symbol = "S"
+atomic_number = 16
+atom_color = Color(0.8627451, 0.5686275, 0.3764706, 1)
+metadata/_custom_type_script = "uid://d2if5sc0evrad"
