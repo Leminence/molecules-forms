@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://bkjssp4pyxg02"]
 
 [ext_resource type="Script" uid="uid://c5ympaplvjid" path="res://main/scripts/main.gd" id="1_4dugh"]
+[ext_resource type="Script" uid="uid://bhwey17svwhtg" path="res://main/scripts/ruler_tool.gd" id="2_0i4oc"]
 [ext_resource type="Script" uid="uid://b6100dawfd0rx" path="res://main/scripts/molecule.gd" id="2_2w1kt"]
 [ext_resource type="Script" uid="uid://cg7scdveaqhou" path="res://main/scripts/placer_tool.gd" id="2_4dugh"]
+[ext_resource type="Script" uid="uid://3ix36aue3w3i" path="res://main/scripts/grid_planes.gd" id="3_grrlh"]
 [ext_resource type="Theme" uid="uid://ce77h3abtsovv" path="res://ui/themes/main_theme.tres" id="3_qvhan"]
 [ext_resource type="Script" uid="uid://bwo7mqyb4kn40" path="res://main/scripts/main_camera.gd" id="4_3wy1v"]
 [ext_resource type="Script" uid="uid://8fet1hym1l22" path="res://main/scripts/axis_indicator_builder.gd" id="4_c651c"]
@@ -17,13 +19,12 @@ sky_cover_modulate = Color(0, 0, 0, 1)
 ground_bottom_color = Color(0.34901962, 0.41568628, 0.5058824, 1)
 ground_horizon_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 ground_curve = 4.94546
-sun_curve = 5.9094896
 
 [sub_resource type="Sky" id="Sky_eunhr"]
 sky_material = SubResource("ProceduralSkyMaterial_qvhan")
 
 [sub_resource type="Environment" id="Environment_yh5la"]
-background_mode = 2
+background_mode = 1
 background_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
 sky = SubResource("Sky_eunhr")
 ambient_light_source = 3
@@ -57,9 +58,9 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="Main" type="Node" unique_id=1023828138 node_paths=PackedStringArray("camera")]
+[node name="Main" type="Node" unique_id=1023828138 node_paths=PackedStringArray("primary_camera")]
 script = ExtResource("1_4dugh")
-camera = NodePath("UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView/SubViewport/MainCamera")
+primary_camera = NodePath("UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MainViewport/SubViewport/MainCamera")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1934531487]
 environment = SubResource("Environment_yh5la")
@@ -70,22 +71,25 @@ layers = 3
 directional_shadow_mode = 0
 directional_shadow_fade_start = 1.0
 
+[node name="RulerTool" type="Node" parent="." unique_id=1584091530]
+script = ExtResource("2_0i4oc")
+
 [node name="PlacerTool" type="Node" parent="." unique_id=1450123679]
 script = ExtResource("2_4dugh")
+
+[node name="GridPlanes" type="Node3D" parent="." unique_id=41387988 node_paths=PackedStringArray("camera")]
+script = ExtResource("3_grrlh")
+camera = NodePath("../UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MainViewport/SubViewport/MainCamera")
+cell_size = 5.0
+axis_length_multiplier = 100.0
 
 [node name="Molecule" type="Node3D" parent="." unique_id=1598166332]
 unique_name_in_owner = true
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("2_2w1kt")
 
-[node name="Label3D" type="Label3D" parent="Molecule" unique_id=1771933285]
-visible = false
-billboard = 1
-no_depth_test = true
-texture_filter = 0
-text = "H"
-font_size = 100
-outline_size = 0
+[node name="Label3D" type="Label3D" parent="Molecule" unique_id=1578933492]
+layers = 4
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1933350296]
 
@@ -137,7 +141,6 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TopPanel" type="PanelContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer" unique_id=1708642843]
-visible = false
 layout_mode = 2
 focus_behavior_recursive = 1
 
@@ -151,6 +154,14 @@ theme_override_constants/margin_bottom = 0
 [node name="Vbox" type="HBoxContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer" unique_id=851580747]
 layout_mode = 2
 theme_override_constants/separation = 6
+
+[node name="CheckBox" type="CheckBox" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer/Vbox" unique_id=923866477]
+layout_mode = 2
+text = "Mostrar simbolo químico"
+
+[node name="RulerBox" type="CheckBox" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer/Vbox" unique_id=263146633]
+layout_mode = 2
+text = "Régua"
 
 [node name="PanelsDivider" type="HSplitContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer" unique_id=826774479]
 layout_mode = 2
@@ -166,7 +177,8 @@ size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_kfbq2")
 
-[node name="3DView" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel" unique_id=1614834645]
+[node name="MainViewport" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel" unique_id=1614834645]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -175,14 +187,14 @@ size_flags_stretch_ratio = 0.0
 stretch = true
 mouse_target = true
 
-[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView" unique_id=330914518]
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MainViewport" unique_id=330914518]
 handle_input_locally = false
-size = Vector2i(820, 624)
+size = Vector2i(820, 574)
 render_target_update_mode = 4
 
-[node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/3DView/SubViewport" unique_id=969331975]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-cull_mask = 1048573
+[node name="MainCamera" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MainViewport/SubViewport" unique_id=969331975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7519789, 5)
+cull_mask = 1048569
 fov = 40.0
 size = 4.0
 script = ExtResource("4_3wy1v")
@@ -195,26 +207,26 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="AxisViewContainer" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
+[node name="AxisViewPort" type="SubViewportContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer" unique_id=401225152]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer" unique_id=873792106]
+[node name="SubViewport" type="SubViewport" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewPort" unique_id=873792106]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(300, 300)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=1690004587]
+[node name="Camera3D" type="Camera3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewPort/SubViewport" unique_id=1690004587]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
-cull_mask = 1048574
+cull_mask = 2
 projection = 1
 size = 2.0
 
-[node name="AxisIndicatorBuilder" type="Node3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewContainer/SubViewport" unique_id=2083230994 node_paths=PackedStringArray("target_molecule")]
+[node name="AxisIndicatorBuilder" type="Node3D" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/3DPanel/MarginContainer/AxisViewPort/SubViewport" unique_id=2083230994 node_paths=PackedStringArray("target_camera")]
 script = ExtResource("4_c651c")
-target_molecule = NodePath("../../../../../../../../../../../Molecule")
+target_camera = NodePath("../../../../MainViewport/SubViewport/MainCamera")
 
 [node name="SidePanel" type="PanelContainer" parent="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider" unique_id=2055327877]
 unique_name_in_owner = true
@@ -256,4 +268,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 5
 
+[connection signal="toggled" from="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer/Vbox/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="toggled" from="UI/MainUI/Principal/MarginContainer/VBoxContainer/TopPanel/MarginContainer/Vbox/RulerBox" to="." method="_on_ruler_box_toggled"]
 [connection signal="item_selected" from="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel/MarginContainer/Vbox/ElementOption" to="UI/MainUI/Principal/MarginContainer/VBoxContainer/PanelsDivider/SidePanel" method="_on_element_option_item_selected"]

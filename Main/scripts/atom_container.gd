@@ -11,7 +11,7 @@ var _atom: MeshInstance3D
 
 func setup_atom_container(atom: MeshInstance3D) -> void:
 	_atom = atom
-	atom_name_label.text = atom.name
+	atom_name_label.text = atom.element.symbol + " (" + atom.element.element_name + ")"
 	var pos = atom.position
 	atom_position_label.text = "Pos: <%.2f, %.2f, %.2f>" % [pos.x, pos.y, pos.z]
 	atom_delete_button.pressed.connect(_on_delete_pressed)

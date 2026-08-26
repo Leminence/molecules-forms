@@ -22,6 +22,8 @@ func _init(_element: Element) -> void:
 
 func _setup_atom_name_billboard() -> void:
 	var name_label := Label3D.new()
+	name_label.set_layer_mask_value(1, false)
+	name_label.set_layer_mask_value(3, true)
 	name_label.text = element.symbol
 	name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	name_label.pixel_size = element.atom_radius * 0.01

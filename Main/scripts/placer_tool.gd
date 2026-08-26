@@ -12,6 +12,7 @@ signal atom_removed(atom: MeshInstance3D)
 
 var _molecule: Node3D
 var _camera: Camera3D
+var _main_viewport: SubViewportContainer
 var _atom_id: int = 0
 
 var _press_pos: Vector2
@@ -25,9 +26,10 @@ const COLOR_PREVIEW := Color(1.0, 1.0, 1.0, 0.3)
 const PLACEMENT_PLANE := Plane(Vector3.UP, 0.0)
 const PLACEMENT_DISTANCE := 5.0  # distância à frente da câmera
 
-func setup(molecule: Node3D, camera: Camera3D) -> void:
+func setup(molecule: Node3D, camera: Camera3D, main_viewport: SubViewportContainer) -> void:
 	_molecule = molecule
 	_camera = camera
+	_main_viewport = main_viewport
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -45,7 +47,6 @@ func _on_press(screen_pos: Vector2) -> void:
 	_press_pos = screen_pos
 	_is_dragging = false
 
-	# Verifica se clicou numa ligação
 	var bond = _pick_bond(screen_pos)
 	if bond:
 		_cycle_bond(bond)
@@ -141,12 +142,13 @@ func _place_atom(world_pos: Vector3) -> MeshInstance3D:
 
 	var atom : Atom = Atom.new(element)
 	atom.position = _molecule.to_local(world_pos)
-	atom.name = "%d - %s" % [_atom_id, element.symbol]
+	atom.name = "%s [%s]" % [element.symbol, _atom_id]
 	atom.set_meta("is_atom", true)
 
 	var body: StaticBody3D = StaticBody3D.new()
 	var col: CollisionShape3D = CollisionShape3D.new()
 	var shape: SphereShape3D = SphereShape3D.new()
+	shape.radius = element.atom_radius * 1.3
 	col.shape = shape
 	body.add_child(col)
 	body.set_meta("owner_atom", atom)
@@ -177,17 +179,19 @@ func _create_bond(atom_a: MeshInstance3D, atom_b: MeshInstance3D, amount: int) -
 	bond_root.set_meta("atom_b", atom_b)
 	_molecule.add_child(bond_root)
 
-	_fill_bond_meshes(bond_root, pos_a, pos_b, amount)
+	_fill_bond_meshes(bond_root, atom_a, atom_b, amount)
 
 	# Collider no bond_root para picking
 	var body := StaticBody3D.new()
 	var col  := CollisionShape3D.new()
 	var shape := CapsuleShape3D.new()
-	shape.radius = 0.1
+	shape.radius = 0.15
 	shape.height = dist
 	col.shape = shape
 	body.set_meta("owner_bond", bond_root)
 	bond_root.add_child(body)
+	col.shape = shape
+	body.add_child(col)
 	body.global_position = mid
 	var up_ref := Vector3.UP if abs(dir.dot(Vector3.UP)) < 0.99 else Vector3.RIGHT
 	body.look_at(mid + dir, up_ref)
@@ -198,11 +202,28 @@ func _create_bond(atom_a: MeshInstance3D, atom_b: MeshInstance3D, amount: int) -
 	atom_b.get_meta("bonds").append(bond_root)
 
 
-func _fill_bond_meshes(bond_root: Node3D, pos_a: Vector3, pos_b: Vector3, amount: int) -> void:
-	# Limpa cilindros anteriores (para quando cicla o tipo)
+func _fill_bond_meshes(bond_root: Node3D, atom_a: MeshInstance3D, atom_b: MeshInstance3D, amount: int) -> void:
 	for child in bond_root.get_children():
 		if child is MeshInstance3D:
 			child.queue_free()
+
+	var pos_a: Vector3 = atom_a.global_position
+	var pos_b: Vector3 = atom_b.global_position
+	var color_a: Color = atom_a.material_override.albedo_color
+	var color_b: Color= atom_b.material_override.albedo_color
+
+	# Gradiente sem transição — corte exato no meio
+	var gradient: Gradient = Gradient.new()
+	gradient.interpolation_mode = Gradient.GRADIENT_INTERPOLATE_CONSTANT
+	gradient.set_color(0, color_a)
+	gradient.add_point(0.5, color_b)
+
+	var tex := GradientTexture2D.new()
+	tex.gradient = gradient
+	tex.width = 1
+	tex.height = 4
+	tex.fill_from = Vector2.ZERO
+	tex.fill_to = Vector2(0, 0.5)
 
 	var dir  := (pos_b - pos_a).normalized()
 	var mid  := (pos_a + pos_b) / 2.0
@@ -220,8 +241,9 @@ func _fill_bond_meshes(bond_root: Node3D, pos_a: Vector3, pos_b: Vector3, amount
 			offset = perp * offset_dist * (i - 1.0)
 
 		var mat := StandardMaterial3D.new()
-		mat.albedo_color = COLOR_BOND
+		mat.albedo_texture = tex
 		mat.roughness = 0.5
+		mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 
 		var cyl := CylinderMesh.new()
 		cyl.height = dist
@@ -245,7 +267,7 @@ func _cycle_bond(bond_root: Node3D) -> void:
 
 	var atom_a: MeshInstance3D = bond_root.get_meta("atom_a")
 	var atom_b: MeshInstance3D = bond_root.get_meta("atom_b")
-	_fill_bond_meshes(bond_root, atom_a.global_position, atom_b.global_position, next)
+	_fill_bond_meshes(bond_root, atom_a, atom_b, next)
 
 # Picking
 func _pick_atom(screen_pos: Vector2) -> MeshInstance3D:
@@ -267,17 +289,20 @@ func _pick_bond(screen_pos: Vector2) -> Node3D:
 		return col.get_meta("owner_bond")
 	return null
 
-
+# Raycasting
 func _raycast(screen_pos: Vector2) -> Dictionary:
 	var space := _molecule.get_world_3d().direct_space_state
-	var origin := _camera.project_ray_origin(screen_pos)
-	var end    := origin + _camera.project_ray_normal(screen_pos) * 100.0
+	var local_pos := screen_pos - _main_viewport.global_position
+	
+	var origin := _camera.project_ray_origin(local_pos)
+	var end    := origin + _camera.project_ray_normal(local_pos) * 100.0
 	var query  := PhysicsRayQueryParameters3D.create(origin, end)
 	return space.intersect_ray(query)
 
 
 func _raycast_plane(screen_pos: Vector2, reference_pos: Vector3 = Vector3.INF) -> Variant:
-	# Se tiver uma posição de referência, usa a distância real até ela
+	var local_pos := screen_pos - _main_viewport.global_position
+
 	var dist: float
 	if reference_pos != Vector3.INF:
 		dist = _camera.global_position.distance_to(reference_pos)
@@ -288,16 +313,16 @@ func _raycast_plane(screen_pos: Vector2, reference_pos: Vector3 = Vector3.INF) -
 	var plane_normal := -_camera.global_basis.z
 	var plane := Plane(plane_normal, plane_center.dot(plane_normal))
 
-	var origin := _camera.project_ray_origin(screen_pos)
-	var dir    := _camera.project_ray_normal(screen_pos)
+	var origin := _camera.project_ray_origin(local_pos)
+	var dir    := _camera.project_ray_normal(local_pos)
 	return plane.intersects_ray(origin, dir)
 
 # Helpers
 func _bond_radius(amount: int) -> float:
 	match amount:
-		1: return 0.08
-		2: return 0.055
-		3: return 0.04
+		1: return 0.1
+		2: return 0.07
+		3: return 0.05
 	return 0.08
 
 

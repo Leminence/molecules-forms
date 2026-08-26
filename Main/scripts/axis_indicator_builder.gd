@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var target_molecule: Node3D
+@export var target_camera: Node3D
 
 const AXIS_DATA := [
 	# [direção, cor, label, posição do label]
@@ -88,5 +88,7 @@ func _build_arm(origin: Vector3, dir: Vector3, col: Color, label: String) -> voi
 
 
 func _process(_delta: float) -> void:
-	if target_molecule:
-		transform.basis = target_molecule.transform.basis
+	if target_camera:
+		var camera_basis := target_camera.global_transform.basis.orthonormalized()
+		# Inversa da rotação — faz o indicador contrarotar com a câmera
+		transform.basis = camera_basis.inverse()
